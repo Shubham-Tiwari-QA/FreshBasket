@@ -1,0 +1,4797 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FreshBasket | QA Automation Practice</title>
+
+    <style>
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #2f7d32;
+            --dark-green: #1f5e24;
+            --light-green: #eef8ee;
+            --orange: #ff7a00;
+            --text: #202124;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --background: #f6f7f6;
+            --white: #ffffff;
+            --danger: #dc2626;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            width: min(1280px, 92%);
+            margin: auto;
+        }
+
+
+        /* =========================
+           GLOBAL LOADER
+        ========================= */
+
+        .loader-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(5px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            z-index: 99999;
+        }
+
+        .loader-box {
+            background: white;
+            padding: 35px 45px;
+            border-radius: 22px;
+            text-align: center;
+            min-width: 260px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #e5e7eb;
+            border-top-color: var(--green);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loader-box h3 {
+            margin-bottom: 7px;
+        }
+
+        .loader-box p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #164f22, #57a65c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .login-box {
+            width: min(1050px, 100%);
+            min-height: 620px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+        }
+
+        .login-form-side {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-logo {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 45px;
+        }
+
+        .login-logo span {
+            color: var(--green);
+        }
+
+        .login-form-side h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .login-form-side>p {
+            color: var(--muted);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--green);
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap button {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: transparent;
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 22px;
+            font-size: 13px;
+        }
+
+        .login-main-btn {
+            padding: 15px;
+            background: var(--green);
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .login-main-btn:hover {
+            background: var(--dark-green);
+        }
+
+        .login-error {
+            color: var(--danger);
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .demo-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f0f8f0;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .login-visual {
+            padding: 60px;
+            color: white;
+            background: linear-gradient(135deg, #287332, #76ba78);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-visual h2 {
+            font-size: 45px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .login-visual p {
+            line-height: 1.7;
+        }
+
+        .login-features {
+            margin-top: 40px;
+            display: grid;
+            gap: 13px;
+        }
+
+        .feature-item {
+            padding: 14px;
+            background: rgba(255, 255, 255, .12);
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .top-strip {
+            background: var(--dark-green);
+            color: white;
+            font-size: 12px;
+            padding: 9px 0;
+        }
+
+        .top-strip .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .main-header {
+            background: white;
+            padding: 17px 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--green);
+        }
+
+        .location {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .location strong {
+            display: block;
+            color: var(--text);
+            margin-top: 4px;
+        }
+
+        .search-box {
+            flex: 1;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #f7f8f7;
+            outline: none;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            padding: 11px 14px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .cart-btn {
+            background: var(--green);
+            color: white;
+        }
+
+        .nav-bar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            padding: 15px 0;
+            overflow-x: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #444;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            padding: 40px 0;
+        }
+
+        .hero-banner {
+            min-height: 370px;
+            border-radius: 24px;
+            padding: 60px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background:
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,.2), transparent 20%),
+                linear-gradient(120deg, #1f6b2b, #65af68);
+        }
+
+        .hero-content {
+            max-width: 580px;
+        }
+
+        .hero-tag {
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, .15);
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .hero h1 {
+            font-size: 50px;
+            margin: 20px 0;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .hero button {
+            margin-top: 25px;
+            padding: 15px 25px;
+            background: white;
+            color: var(--green);
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        .hero-art {
+            font-size: 130px;
+        }
+
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section {
+            padding: 35px 0;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2 {
+            font-size: 27px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+
+        /* =========================
+           CATEGORIES
+        ========================= */
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+        }
+
+        .category-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            transition: .25s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
+        }
+
+        .category-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           PRODUCTS
+        ========================= */
+
+        .product-toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .product-toolbar select {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: .25s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, .1);
+        }
+
+        .product-image {
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f8f4;
+            font-size: 70px;
+            position: relative;
+        }
+
+        .discount-badge {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            background: var(--orange);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-category {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .product-name {
+            margin: 7px 0;
+            font-size: 15px;
+        }
+
+        .rating {
+            color: #f59e0b;
+            font-size: 12px;
+        }
+
+        .rating span {
+            color: var(--muted);
+        }
+
+        .price-row {
+            margin-top: 12px;
+        }
+
+        .price {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .mrp {
+            color: #999;
+            font-size: 12px;
+            text-decoration: line-through;
+        }
+
+        .add-cart-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 11px;
+            border: 1px solid var(--green);
+            background: white;
+            color: var(--green);
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .add-cart-btn:hover {
+            background: var(--green);
+            color: white;
+        }
+
+
+        /* =========================
+           CART
+        ========================= */
+
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            z-index: 1999;
+        }
+
+        .cart-panel {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 430px;
+            max-width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            transition: .35s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-panel.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 22px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .close-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .cart-item-icon {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f3f6f3;
+            border-radius: 10px;
+            font-size: 30px;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .qty-control button {
+            width: 28px;
+            height: 28px;
+        }
+
+        .cart-summary {
+            padding: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .summary-total {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            background: var(--green);
+            color: white;
+            border-radius: 8px;
+        }
+
+
+        /* =========================
+           CHECKOUT
+        ========================= */
+
+        .checkout-section {
+            padding-bottom: 60px;
+        }
+
+        .checkout-box {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .form-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .payment-card {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .place-order {
+            width: 100%;
+            padding: 16px;
+            margin-top: 25px;
+            background: var(--green);
+            color: white;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           ORDERS
+        ========================= */
+
+        .orders-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .order-status {
+            background: #eaf7ea;
+            color: var(--green);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .order-info {
+            margin-top: 18px;
+            line-height: 1.9;
+        }
+
+        .order-actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .track-order {
+            padding: 10px 15px;
+            background: #2563eb;
+            color: white;
+            border-radius: 7px;
+        }
+
+        .return-order {
+            padding: 10px 15px;
+            border: 1px solid #fca5a5;
+            background: white;
+            color: var(--danger);
+            border-radius: 7px;
+        }
+
+
+        /* =========================
+           TRACKING
+        ========================= */
+
+        .tracking-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f6faf6;
+            border-radius: 10px;
+        }
+
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            font-size: 12px;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            margin: auto auto 7px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step.active .step-circle {
+            background: var(--green);
+        }
+
+
+        /* =========================
+           PLAYGROUND
+        ========================= */
+
+        .playground {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .playground-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .playground-grid button,
+        .upload-label,
+        .download-link {
+            padding: 14px;
+            border: 1px solid var(--border);
+            background: #f7f7f7;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .upload-label input {
+            display: none;
+        }
+
+        .download-link {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #202124;
+            color: white;
+            padding: 16px 22px;
+            border-radius: 10px;
+            z-index: 5000;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            margin-top: 50px;
+            padding: 45px 0;
+            background: #173719;
+            color: white;
+            text-align: center;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width: 1000px) {
+
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media(max-width: 750px) {
+
+            .login-box {
+                grid-template-columns: 1fr;
+            }
+
+            .login-visual {
+                display: none;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-field.full {
+                grid-column: auto;
+            }
+
+            .payment-options {
+                flex-direction: column;
+            }
+
+            .header-row {
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                flex-basis: 100%;
+                order: 3;
+            }
+
+            .location {
+                display: none;
+            }
+
+            .hero-art {
+                display: none;
+            }
+
+            .playground-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 450px) {
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero {
+                padding: 20px 0;
+            }
+
+            .hero-banner {
+                padding: 30px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+        /* ============================= */
+/* PAYMENT PAGE */
+/* ============================= */
+
+.payment-page {
+    background: #f5f5f5;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+
+/* PAYMENT HEADER */
+
+.payment-header {
+    background: #4d7000;
+    color: white;
+
+    padding: 25px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    border-top: 4px solid #74a800;
+}
+
+
+.payment-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+
+.payment-header p {
+    margin: 6px 0 0;
+    font-size: 14px;
+}
+
+
+.payment-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+    color: #4d7000;
+
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+
+/* MAIN PAYMENT CONTAINER */
+
+.payment-container {
+
+    max-width: 1100px;
+
+    margin: 25px auto;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 25px;
+}
+
+
+/* PAYMENT METHODS */
+
+.payment-methods {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+
+.payment-methods h3 {
+    margin-top: 0;
+}
+
+
+.payment-option {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 18px 12px;
+
+    border-bottom: 1px solid #eee;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.payment-option:hover {
+
+    background: #f6f8f1;
+
+}
+
+
+.payment-option input {
+
+    accent-color: #5b8500;
+
+    width: 18px;
+
+    height: 18px;
+
+}
+
+
+.payment-name {
+
+    font-weight: 600;
+
+    display: block;
+
+}
+
+
+.payment-desc {
+
+    color: #777;
+
+    font-size: 12px;
+
+    margin-left: auto;
+
+}
+
+
+/* ORDER SUMMARY */
+
+.order-summary {
+
+    background: white;
+
+    padding: 18px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+    border-top: 4px solid #5b8500;
+
+}
+
+
+.order-summary h3 {
+
+    color: #333;
+
+    border-bottom: 1px solid #ddd;
+
+    padding-bottom: 12px;
+
+}
+
+
+/* VOUCHER */
+
+.voucher-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.voucher-icon {
+
+    background: #76a700;
+
+    color: white;
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+.voucher-box p {
+
+    margin: 4px 0;
+
+    font-size: 12px;
+
+    color: #777;
+
+}
+
+
+.voucher-box button {
+
+    margin-left: auto;
+
+    border: none;
+
+    background: transparent;
+
+    color: #c73a2d;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+/* SUMMARY ROW */
+
+.summary-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 14px 8px;
+
+    color: #444;
+
+}
+
+
+.summary-row del {
+
+    color: #999;
+
+    margin-right: 5px;
+
+}
+
+
+.free {
+
+    color: #6a9800;
+
+}
+
+
+/* CHARGE DETAILS */
+
+.charge-details {
+
+    border-top: 1px dashed #ccc;
+
+    border-bottom: 1px dashed #ccc;
+
+    margin-top: 8px;
+
+}
+
+
+.free-text {
+
+    color: #5d8c00;
+
+    font-size: 13px;
+
+    padding-left: 8px;
+
+}
+
+
+.hide-details-btn {
+
+    border: none;
+
+    background: transparent;
+
+    color: #295a92;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+}
+
+
+/* WALLET */
+
+.wallet-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 15px 8px;
+
+    border-bottom: 1px solid #ddd;
+
+    color: #777;
+
+}
+
+
+/* TOTAL */
+
+.total-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 18px 8px;
+
+    font-size: 17px;
+
+}
+
+
+/* SAVINGS */
+
+.savings-box {
+
+    background: #eef4df;
+
+    padding: 14px;
+
+    color: #527900;
+
+}
+
+
+.savings-box div {
+
+    display: flex;
+
+    justify-content: space-between;
+
+}
+
+
+/* PLACE ORDER BUTTON */
+
+.place-order-btn {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border: none;
+
+    background: #84a900;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+}
+
+
+.place-order-btn:hover {
+
+    background: #6e9100;
+
+}
+
+
+/* MOBILE RESPONSIVE */
+
+@media(max-width: 768px) {
+
+    .payment-container {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .payment-page {
+
+        padding: 10px;
+
+    }
+
+}
+/* PAYMENT MODAL */
+
+.payment-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.6);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 9999;
+
+}
+
+
+.payment-modal.hidden {
+
+    display: none;
+
+}
+
+
+.payment-modal-box {
+
+    width: 450px;
+
+    max-width: 90%;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 12px;
+
+    position: relative;
+
+    animation: paymentPopup 0.3s ease;
+
+}
+
+
+@keyframes paymentPopup {
+
+    from {
+
+        transform: scale(0.8);
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        transform: scale(1);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+.close-payment {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 15px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+}
+
+
+.payment-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+.payment-form input,
+.payment-form select {
+
+    padding: 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+}
+
+
+.card-row {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+
+}
+
+
+.card-row div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.dummy-pay-btn {
+
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 15px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #84a900;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.dummy-pay-btn:hover {
+
+    background: #6d8c00;
+
+}
+
+
+/* PROCESSING */
+
+.payment-processing {
+
+    text-align: center;
+
+    padding: 30px;
+
+}
+
+
+.spinner {
+
+    width: 50px;
+
+    height: 50px;
+
+    border: 5px solid #ddd;
+
+    border-top: 5px solid #84a900;
+
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
+
+    margin: auto;
+
+}
+
+
+@keyframes spin {
+
+    100% {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+/* SUCCESS */
+
+.payment-success {
+
+    text-align: center;
+
+    padding: 20px;
+
+}
+
+
+.success-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    background: #68a000;
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 40px;
+
+    margin: 0 auto 20px;
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         GLOBAL LOADER
+    ========================= -->
+
+    <div id="loader" class="loader-overlay hidden">
+
+        <div class="loader-box">
+
+            <div class="spinner"></div>
+
+            <h3 id="loaderText">
+                Loading...
+            </h3>
+
+            <p>
+                Please wait
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LOGIN PAGE
+    ========================= -->
+
+    <section id="loginPage" class="login-page">
+
+        <div class="login-box">
+
+            <div class="login-form-side">
+
+                <div class="login-logo">
+                    Fresh<span>Basket</span>
+                </div>
+
+                <h1>Welcome back 👋</h1>
+
+                <p>
+                    Login to continue shopping fresh groceries.
+                </p>
+
+
+                <div class="input-group">
+
+                    <label>Username</label>
+
+                    <input
+                        id="username"
+                        data-testid="username"
+                        placeholder="Enter username"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>Password</label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            id="password"
+                            data-testid="password"
+                            type="password"
+                            placeholder="Enter password"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="togglePassword()"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-options">
+
+                    <label>
+                        <input
+                            id="rememberMe"
+                            type="checkbox"
+                        >
+
+                        Remember me
+                    </label>
+
+                    <span>
+                        Forgot Password?
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="loginButton"
+                    data-testid="login-button"
+                    class="login-main-btn"
+                    onclick="login()"
+                >
+                    Login
+                </button>
+
+
+                <div
+                    id="loginError"
+                    class="login-error"
+                ></div>
+
+
+                <div class="demo-box">
+
+                    <strong>Demo Login</strong>
+
+                    <br><br>
+
+                    Username:
+                    <strong>admin</strong>
+
+                    <br>
+
+                    Password:
+                    <strong>admin123</strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-visual">
+
+                <h2>
+                    Fresh groceries.<br>
+                    Better shopping.
+                </h2>
+
+                <p>
+                    A realistic e-commerce website created for
+                    QA and Playwright automation practice.
+                </p>
+
+
+                <div class="login-features">
+
+                    <div class="feature-item">
+                        ✓ Login Testing
+                    </div>
+
+                    <div class="feature-item">
+                        ✓ Search & Filters
+                    </div>
+
+                    <div class="feature-item">
+                        ✓ Cart & Checkout
+                    </div>
+
+                    <div class="feature-item">
+                        ✓ Orders & Tracking
+                    </div>
+
+                    <div class="feature-item">
+                        ✓ Return Workflow
+                    </div>
+
+                    <div class="feature-item">
+                        ✓ Loader Testing
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAIN APPLICATION
+    ========================= -->
+
+    <div id="app" class="hidden">
+
+
+        <div class="top-strip">
+
+            <div class="container">
+
+                <span>
+                    Fresh groceries delivered to your doorstep
+                </span>
+
+                <span>
+                    Customer Care: 1800-000-000
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- HEADER -->
+
+        <header class="main-header">
+
+            <div class="container header-row">
+
+                <div class="logo">
+                    Fresh<span>Basket</span>
+                </div>
+
+
+                <div class="location">
+
+                    Delivering to
+
+                    <strong>
+                        📍 New Delhi, India
+                    </strong>
+
+                </div>
+
+
+                <div class="search-box">
+
+                    <input
+                        id="searchInput"
+                        data-testid="product-search"
+                        placeholder="🔍 Search for products..."
+                        oninput="renderProducts()"
+                    >
+
+                </div>
+
+
+                <div class="header-buttons">
+
+                    <button
+                        class="header-btn"
+                        onclick="scrollToId('orders')"
+                    >
+                        My Orders
+                    </button>
+
+
+                    <button
+                        class="header-btn cart-btn"
+                        data-testid="cart-button"
+                        onclick="openCart()"
+                    >
+                        🛒 Cart
+                        <span id="cartCount">
+                            0
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="header-btn"
+                        onclick="logout()"
+                    >
+                        Logout
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- NAV -->
+
+        <nav class="nav-bar">
+
+            <div class="container nav-links">
+
+                <a href="#products">
+                    All Products
+                </a>
+
+                <a href="#categories">
+                    Categories
+                </a>
+
+                <a href="#orders">
+                    Orders
+                </a>
+
+                <a href="#playground">
+                    QA Playground
+                </a>
+
+            </div>
+
+        </nav>
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="container">
+
+                <div class="hero-banner">
+
+                    <div class="hero-content">
+
+                        <span class="hero-tag">
+                            QA AUTOMATION PRACTICE PROJECT
+                        </span>
+
+
+                        <h1>
+                            Freshness you can trust.
+                        </h1>
+
+
+                        <p>
+                            Shop fresh groceries and practice real-world
+                            e-commerce automation workflows.
+                        </p>
+
+
+                        <button
+                            onclick="scrollToId('products')"
+                        >
+                            Shop Now →
+                        </button>
+
+                    </div>
+
+
+                    <div class="hero-art">
+                        🛒🥬🍎
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CATEGORIES -->
+
+        <section
+            id="categories"
+            class="section"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <h2>
+                        Shop by Category
+                    </h2>
+
+                    <p>
+                        Find everything you need.
+                    </p>
+
+                </div>
+
+
+                <div class="category-grid">
+
+                    <button
+                        class="category-card"
+                        onclick="setCategory('Fruits')"
+                    >
+
+                        <div class="category-icon">
+                            🍎
+                        </div>
+
+                        <strong>
+                            Fruits
+                        </strong>
+
+                    </button>
+
+
+                    <button
+                        class="category-card"
+                        onclick="setCategory('Vegetables')"
+                    >
+
+                        <div class="category-icon">
+                            🥬
+                        </div>
+
+                        <strong>
+                            Vegetables
+                        </strong>
+
+                    </button>
+
+
+                    <button
+                        class="category-card"
+                        onclick="setCategory('Dairy')"
+                    >
+
+                        <div class="category-icon">
+                            🥛
+                        </div>
+
+                        <strong>
+                            Dairy
+                        </strong>
+
+                    </button>
+
+
+                    <button
+                        class="category-card"
+                        onclick="setCategory('Bakery')"
+                    >
+
+                        <div class="category-icon">
+                            🍞
+                        </div>
+
+                        <strong>
+                            Bakery
+                        </strong>
+
+                    </button>
+
+
+                    <button
+                        class="category-card"
+                        onclick="setCategory('Snacks')"
+                    >
+
+                        <div class="category-icon">
+                            🍪
+                        </div>
+
+                        <strong>
+                            Snacks
+                        </strong>
+
+                    </button>
+
+
+                    <button
+                        class="category-card"
+                        onclick="setCategory('all')"
+                    >
+
+                        <div class="category-icon">
+                            🛍️
+                        </div>
+
+                        <strong>
+                            All Products
+                        </strong>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PRODUCTS -->
+
+        <section
+            id="products"
+            class="section"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <h2>
+                        Popular Products
+                    </h2>
+
+                    <p>
+                        Fresh products at great prices.
+                    </p>
+
+                </div>
+
+
+                <div class="product-toolbar">
+
+                    <strong id="productCount">
+                        Products
+                    </strong>
+
+
+                    <select
+                        id="sortProducts"
+                        onchange="renderProducts()"
+                    >
+
+                        <option value="default">
+                            Sort by
+                        </option>
+
+                        <option value="low">
+                            Price: Low to High
+                        </option>
+
+                        <option value="high">
+                            Price: High to Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="productGrid"
+                    class="product-grid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHECKOUT -->
+
+        <section
+            id="checkout"
+            class="checkout-section hidden"
+        >
+
+            <div class="container">
+
+                <div class="checkout-box">
+
+                    <h2>
+                        Checkout
+                    </h2>
+
+
+                    <p style="margin-top:8px;color:#666">
+                        Complete your delivery details.
+                    </p>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-field">
+
+                            <input
+                                id="fullName"
+                                data-testid="full-name"
+                                placeholder="Full Name"
+                            >
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <input
+                                id="email"
+                                data-testid="email"
+                                placeholder="Email Address"
+                            >
+
+                        </div>
+
+
+                        <div class="form-field full">
+
+                            <textarea
+                                id="address"
+                                data-testid="address"
+                                placeholder="Complete Delivery Address"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <h3 style="margin-top:25px">
+                        Payment Method
+                    </h3>
+
+
+                    <div class="payment-options">
+
+                        <label class="payment-card">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="UPI"
+                            >
+
+                            UPI
+
+                        </label>
+
+
+                        <label class="payment-card">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="Card"
+                            >
+
+                            Credit / Debit Card
+
+                        </label>
+
+
+                        <label class="payment-card">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="Cash on Delivery"
+                            >
+
+                            Cash on Delivery
+
+                        </label>
+
+                    </div>
+
+
+                    <button
+                        class="place-order"
+                        data-testid="place-order"
+                        onclick="placeOrder()"
+                    >
+                        Place Secure Order
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ORDERS -->
+
+        <section
+            id="orders"
+            class="section"
+        >
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <h2>
+                        My Orders
+                    </h2>
+
+                    <p>
+                        Track and manage your orders.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="ordersList"
+                    class="orders-list"
+                >
+
+                    <div class="order-card">
+                        No orders placed yet.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QA PLAYGROUND -->
+
+        <section
+            id="playground"
+            class="section"
+        >
+
+            <div class="container">
+
+                <div class="playground">
+
+                    <h2>
+                        QA Automation Playground
+                    </h2>
+
+                    <p style="margin-top:8px;color:#777">
+                        Practice different Playwright automation scenarios.
+                    </p>
+
+
+                    <div class="playground-grid">
+
+                        <button
+                            data-testid="alert-button"
+                            onclick="showAlert()"
+                        >
+                            Alert
+                        </button>
+
+
+                        <button
+                            onclick="showConfirm()"
+                        >
+                            Confirm Dialog
+                        </button>
+
+
+                        <button
+                            onclick="openNewTab()"
+                        >
+                            New Tab
+                        </button>
+
+
+                        <label class="upload-label">
+
+                            Upload File
+
+                            <input
+                                id="fileUpload"
+                                type="file"
+                                onchange="showFileName()"
+                            >
+
+                        </label>
+
+
+                        <a
+                            class="download-link"
+                            download="qa-report.txt"
+                            href="data:text/plain,QA Automation Practice Report"
+                        >
+                            Download File
+                        </a>
+
+
+                        <button
+                            onclick="toggleDynamicElement()"
+                        >
+                            Dynamic Element
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="fileName"
+                        style="margin-top:15px"
+                    ></p>
+
+
+                    <button
+                        id="dynamicElement"
+                        class="hidden"
+                        style="
+                            margin-top:15px;
+                            padding:12px;
+                            background:#2f7d32;
+                            color:white;
+                            border-radius:8px;
+                        "
+                    >
+                        Dynamic Button
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            <div class="container">
+
+                <h2>
+                    FreshBasket
+                </h2>
+
+                <p style="margin-top:10px">
+                    QA Automation Practice Project
+                    • Playwright • UI Testing
+                </p>
+
+            </div>
+
+        </footer>
+
+    </div>
+
+
+    <!-- =========================
+         CART
+    ========================= -->
+
+    <div
+        id="cartOverlay"
+        class="cart-overlay hidden"
+        onclick="closeCart()"
+    ></div>
+
+
+    <aside
+        id="cartPanel"
+        class="cart-panel"
+    >
+
+        <div class="cart-header">
+
+            <h2>
+                Your Cart
+            </h2>
+
+
+            <button
+                class="close-btn"
+                onclick="closeCart()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            id="cartItems"
+            class="cart-items"
+        ></div>
+
+
+        <div class="cart-summary">
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <span>
+                    ₹<span id="subtotal">0</span>
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Delivery
+                </span>
+
+                <span>
+                    ₹<span id="delivery">0</span>
+                </span>
+
+            </div>
+
+
+            <div class="summary-row summary-total">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ₹<span id="total">0</span>
+                </span>
+
+            </div>
+
+
+            <button
+                class="checkout-btn"
+                onclick="goToCheckout()"
+            >
+                Proceed to Checkout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- TOAST -->
+
+    <div
+        id="toast"
+        class="toast hidden"
+    ></div>
+<!-- PAYMENT SECTION -->
+<section id="paymentPage" class="payment-page">
+
+  <div class="payment-header">
+    <div class="payment-icon">💳</div>
+
+    <div>
+      <h2>Payment Options</h2>
+      <p>Pay Order amount by selecting any payment mode</p>
+    </div>
+  </div>
+
+
+  <div class="payment-container">
+
+    <!-- LEFT SIDE PAYMENT METHODS -->
+    <div class="payment-methods">
+
+      <h3>Select Payment Method</h3>
+
+      <label class="payment-option">
+        <input type="radio" name="payment" value="UPI">
+        <span class="radio-custom"></span>
+        <span class="payment-name">UPI</span>
+        <span class="payment-desc">Google Pay, PhonePe, Paytm</span>
+      </label>
+
+
+      <label class="payment-option">
+        <input type="radio" name="payment" value="Card">
+        <span class="radio-custom"></span>
+        <span class="payment-name">Credit / Debit Card</span>
+        <span class="payment-desc">Visa, Mastercard, RuPay</span>
+      </label>
+
+
+      <label class="payment-option">
+        <input type="radio" name="payment" value="Net Banking">
+        <span class="radio-custom"></span>
+        <span class="payment-name">Net Banking</span>
+        <span class="payment-desc">Pay using your bank account</span>
+      </label>
+
+
+      <label class="payment-option">
+        <input type="radio" name="payment" value="Cash on Delivery">
+        <span class="radio-custom"></span>
+        <span class="payment-name">Cash on Delivery</span>
+        <span class="payment-desc">Pay when your order arrives</span>
+      </label>
+
+    </div>
+
+
+    <!-- RIGHT SIDE ORDER SUMMARY -->
+    <div class="order-summary">
+
+      <div class="voucher-box">
+
+        <div class="voucher-icon">%</div>
+
+        <div>
+          <strong>Apply Voucher</strong>
+          <p>0 vouchers are available</p>
+        </div>
+
+        <button id="viewVoucherBtn">View all</button>
+
+      </div>
+
+
+      <h3>Order Summary</h3>
+
+
+      <div class="summary-row">
+        <span>Basket Value</span>
+        <strong id="basketValue">₹0</strong>
+      </div>
+
+
+      <div class="summary-row">
+        <span>Delivery & Handling Charges</span>
+
+        <div>
+          <del id="originalDelivery">₹52</del>
+          <strong id="deliveryCharge">₹22</strong>
+        </div>
+      </div>
+
+
+      <button class="hide-details-btn" id="toggleDetails">
+        Hide Details ⌃
+      </button>
+
+
+      <div id="chargeDetails" class="charge-details">
+
+        <div class="summary-row">
+          <span>Delivery Charge</span>
+
+          <div>
+            <del>₹30</del>
+            <strong class="free">FREE</strong>
+          </div>
+        </div>
+
+
+        <p class="free-text">
+          Free for first few orders!
+        </p>
+
+
+        <div class="summary-row">
+          <span>Handling Charge ⓘ</span>
+          <strong>₹7</strong>
+        </div>
+
+
+        <div class="summary-row">
+          <span>Small Cart Charge ⓘ</span>
+          <strong id="smallCartCharge">₹15</strong>
+        </div>
+
+      </div>
+
+
+      <div class="wallet-row">
+
+        <label>
+          <input type="checkbox" id="walletCheck">
+          Use bbWallet
+        </label>
+
+        <span id="walletAmount">₹0</span>
+
+      </div>
+
+
+      <div class="total-row">
+
+        <strong>Total Amount Payable</strong>
+
+        <strong id="totalAmount">₹0</strong>
+
+      </div>
+
+
+      <div class="savings-box">
+
+        <div>
+          <span>Total Savings</span>
+          <strong id="totalSavings">₹0</strong>
+        </div>
+
+      </div>
+
+
+      <button id="placeOrderBtn" class="place-order-btn">
+        Proceed to Payment
+      </button>
+
+    </div>
+
+  </div>
+
+<!-- DUMMY PAYMENT MODAL -->
+
+<div id="dummyPaymentModal" class="payment-modal hidden">
+
+    <div class="payment-modal-box">
+
+        <button id="closePaymentModal" class="close-payment">
+            ×
+        </button>
+
+        <h2 id="paymentTitle">
+            Complete Payment
+        </h2>
+
+
+        <!-- UPI PAYMENT -->
+
+        <div id="upiPaymentForm" class="payment-form hidden">
+
+            <label>
+                UPI ID
+            </label>
+
+            <input
+                type="text"
+                id="upiId"
+                placeholder="example@upi"
+            >
+
+            <button
+                class="dummy-pay-btn"
+                onclick="processDummyPayment('UPI')"
+            >
+                Pay Now
+            </button>
+
+        </div>
+
+
+        <!-- CARD PAYMENT -->
+
+        <div id="cardPaymentForm" class="payment-form hidden">
+
+            <label>
+                Card Number
+            </label>
+
+            <input
+                type="text"
+                id="cardNumber"
+                placeholder="4111 1111 1111 1111"
+                maxlength="19"
+            >
+
+
+            <label>
+                Card Holder Name
+            </label>
+
+            <input
+                type="text"
+                id="cardName"
+                placeholder="Shubham Tiwari"
+            >
+
+
+            <div class="card-row">
+
+                <div>
+
+                    <label>Expiry</label>
+
+                    <input
+                        type="text"
+                        id="expiry"
+                        placeholder="MM/YY"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>CVV</label>
+
+                    <input
+                        type="password"
+                        id="cvv"
+                        placeholder="123"
+                        maxlength="3"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="dummy-pay-btn"
+                onclick="processDummyPayment('Card')"
+            >
+                Pay Securely
+            </button>
+
+        </div>
+
+
+        <!-- NET BANKING -->
+
+        <div id="bankPaymentForm" class="payment-form hidden">
+
+            <label>
+                Select Bank
+            </label>
+
+            <select id="bankName">
+
+                <option value="">
+                    Select your bank
+                </option>
+
+                <option>
+                    State Bank of India
+                </option>
+
+                <option>
+                    HDFC Bank
+                </option>
+
+                <option>
+                    ICICI Bank
+                </option>
+
+                <option>
+                    Axis Bank
+                </option>
+
+            </select>
+
+
+            <button
+                class="dummy-pay-btn"
+                onclick="processDummyPayment('Net Banking')"
+            >
+                Continue to Bank
+            </button>
+
+        </div>
+
+
+        <!-- PAYMENT LOADER -->
+
+        <div id="paymentProcessing" class="payment-processing hidden">
+
+            <div class="spinner"></div>
+
+            <h3>Processing Payment...</h3>
+
+            <p>
+                Please do not refresh the page
+            </p>
+
+        </div>
+
+
+        <!-- PAYMENT SUCCESS -->
+
+        <div id="paymentSuccess" class="payment-success hidden">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2>
+                Payment Successful!
+            </h2>
+
+            <p>
+                Your order has been placed successfully.
+            </p>
+
+            <p>
+                Order ID:
+                <strong id="successOrderId"></strong>
+            </p>
+
+            <p>
+                Payment Method:
+                <strong id="successPaymentMethod"></strong>
+            </p>
+
+            <button
+                class="dummy-pay-btn"
+                id="continueShoppingBtn"
+            >
+                Continue Shopping
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+    <script>
+
+        /* =========================
+           PRODUCTS DATA
+        ========================= */
+
+        const products = [
+
+            {
+                id: 1,
+                name: "Fresh Red Apples",
+                category: "Fruits",
+                price: 120,
+                mrp: 150,
+                rating: 4.5,
+                image: "🍎"
+            },
+
+            {
+                id: 2,
+                name: "Organic Bananas",
+                category: "Fruits",
+                price: 55,
+                mrp: 70,
+                rating: 4.7,
+                image: "🍌"
+            },
+
+            {
+                id: 3,
+                name: "Fresh Oranges",
+                category: "Fruits",
+                price: 90,
+                mrp: 110,
+                rating: 4.3,
+                image: "🍊"
+            },
+
+            {
+                id: 4,
+                name: "Farm Fresh Tomatoes",
+                category: "Vegetables",
+                price: 45,
+                mrp: 60,
+                rating: 4.4,
+                image: "🍅"
+            },
+
+            {
+                id: 5,
+                name: "Organic Carrots",
+                category: "Vegetables",
+                price: 65,
+                mrp: 85,
+                rating: 4.6,
+                image: "🥕"
+            },
+
+            {
+                id: 6,
+                name: "Fresh Spinach",
+                category: "Vegetables",
+                price: 35,
+                mrp: 50,
+                rating: 4.2,
+                image: "🥬"
+            },
+
+            {
+                id: 7,
+                name: "Farm Fresh Milk",
+                category: "Dairy",
+                price: 65,
+                mrp: 75,
+                rating: 4.8,
+                image: "🥛"
+            },
+
+            {
+                id: 8,
+                name: "Premium Eggs",
+                category: "Dairy",
+                price: 95,
+                mrp: 120,
+                rating: 4.5,
+                image: "🥚"
+            },
+
+            {
+                id: 9,
+                name: "Whole Wheat Bread",
+                category: "Bakery",
+                price: 55,
+                mrp: 70,
+                rating: 4.4,
+                image: "🍞"
+            },
+
+            {
+                id: 10,
+                name: "Chocolate Cookies",
+                category: "Snacks",
+                price: 110,
+                mrp: 140,
+                rating: 4.7,
+                image: "🍪"
+            }
+
+        ];
+
+
+        let cart =
+            JSON.parse(
+                localStorage.getItem("freshCart")
+            ) || [];
+
+
+        let orders =
+            JSON.parse(
+                localStorage.getItem("freshOrders")
+            ) || [];
+
+
+        let selectedCategory = "all";
+
+
+        /* =========================
+           LOADER
+        ========================= */
+
+        function showLoader(
+            text = "Loading..."
+        ) {
+
+            document
+                .getElementById("loaderText")
+                .textContent = text;
+
+
+            document
+                .getElementById("loader")
+                .classList
+                .remove("hidden");
+
+        }
+
+
+        function hideLoader() {
+
+            document
+                .getElementById("loader")
+                .classList
+                .add("hidden");
+
+        }
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        function login() {
+
+            const username =
+                document
+                    .getElementById("username")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value
+                    .trim();
+
+
+            document
+                .getElementById("loginError")
+                .textContent = "";
+
+
+            showLoader(
+                "Logging you in..."
+            );
+
+
+            setTimeout(() => {
+
+                if (
+                    username === "admin" &&
+                    password === "admin123"
+                ) {
+
+                    document
+                        .getElementById("loginPage")
+                        .classList
+                        .add("hidden");
+
+
+                    document
+                        .getElementById("app")
+                        .classList
+                        .remove("hidden");
+
+
+                    renderProducts();
+
+                    renderCart();
+
+                    renderOrders();
+
+
+                    hideLoader();
+
+
+                    showToast(
+                        "Login successful! Welcome back."
+                    );
+
+                }
+
+                else {
+
+                    hideLoader();
+
+
+                    document
+                        .getElementById("loginError")
+                        .textContent =
+                        "Invalid username or password.";
+
+                }
+
+            }, 1200);
+
+        }
+
+
+        function togglePassword() {
+
+            const password =
+                document
+                    .getElementById("password");
+
+
+            password.type =
+                password.type === "password"
+                    ? "text"
+                    : "password";
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        function logout() {
+
+            const confirmLogout =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+
+            if (!confirmLogout) return;
+
+
+            showLoader(
+                "Logging out..."
+            );
+
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("app")
+                    .classList
+                    .add("hidden");
+
+
+                document
+                    .getElementById("loginPage")
+                    .classList
+                    .remove("hidden");
+
+
+                hideLoader();
+
+
+                showToast(
+                    "Logged out successfully."
+                );
+
+            }, 800);
+
+        }
+
+
+        /* =========================
+           PRODUCTS
+        ========================= */
+
+        function renderProducts() {
+
+            const search =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase();
+
+
+            const sort =
+                document
+                    .getElementById("sortProducts")
+                    .value;
+
+
+            let filtered =
+                products.filter(product => {
+
+                    const categoryMatch =
+                        selectedCategory === "all" ||
+                        product.category === selectedCategory;
+
+
+                    const searchMatch =
+                        product.name
+                            .toLowerCase()
+                            .includes(search);
+
+
+                    return (
+                        categoryMatch &&
+                        searchMatch
+                    );
+
+                });
+
+
+            if (sort === "low") {
+
+                filtered.sort(
+                    (a, b) =>
+                        a.price - b.price
+                );
+
+            }
+
+
+            if (sort === "high") {
+
+                filtered.sort(
+                    (a, b) =>
+                        b.price - a.price
+                );
+
+            }
+
+
+            document
+                .getElementById("productCount")
+                .textContent =
+                filtered.length + " Products";
+
+
+            const grid =
+                document
+                    .getElementById("productGrid");
+
+
+            grid.innerHTML = "";
+
+
+            filtered.forEach(product => {
+
+                const discount =
+                    Math.round(
+                        (
+                            (
+                                product.mrp -
+                                product.price
+                            )
+                            /
+                            product.mrp
+                        ) * 100
+                    );
+
+
+                grid.innerHTML += `
+
+                    <div
+                        class="product-card"
+                        data-product-id="${product.id}"
+                    >
+
+                        <div class="product-image">
+
+                            <span class="discount-badge">
+                                ${discount}% OFF
+                            </span>
+
+                            ${product.image}
+
+                        </div>
+
+
+                        <div class="product-info">
+
+                            <div class="product-category">
+                                ${product.category}
+                            </div>
+
+
+                            <h3 class="product-name">
+                                ${product.name}
+                            </h3>
+
+
+                            <div class="rating">
+                                ★ ${product.rating}
+                                <span>(120)</span>
+                            </div>
+
+
+                            <div class="price-row">
+
+                                <span class="price">
+                                    ₹${product.price}
+                                </span>
+
+                                <span class="mrp">
+                                    ₹${product.mrp}
+                                </span>
+
+                            </div>
+
+
+                            <button
+                                class="add-cart-btn"
+                                data-testid="add-product-${product.id}"
+                                onclick="addToCart(${product.id})"
+                            >
+                                Add to Cart
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+        }
+
+
+        function setCategory(category) {
+
+            showLoader(
+                "Loading category..."
+            );
+
+
+            setTimeout(() => {
+
+                selectedCategory =
+                    category;
+
+
+                renderProducts();
+
+
+                hideLoader();
+
+
+                scrollToId(
+                    "products"
+                );
+
+            }, 500);
+
+        }
+
+
+        /* =========================
+           CART
+        ========================= */
+
+        function addToCart(id) {
+
+            const product =
+                products.find(
+                    product =>
+                        product.id === id
+                );
+
+
+            const existing =
+                cart.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (existing) {
+
+                existing.quantity++;
+
+            }
+
+            else {
+
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+
+            }
+
+
+            saveCart();
+
+            renderCart();
+
+
+            showToast(
+                product.name +
+                " added to cart"
+            );
+
+        }
+
+
+        function changeQuantity(
+            id,
+            value
+        ) {
+
+            const item =
+                cart.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (!item) return;
+
+
+            item.quantity += value;
+
+
+            if (
+                item.quantity <= 0
+            ) {
+
+                cart =
+                    cart.filter(
+                        item =>
+                            item.id !== id
+                    );
+
+            }
+
+
+            saveCart();
+
+            renderCart();
+
+        }
+
+
+        function saveCart() {
+
+            localStorage.setItem(
+                "freshCart",
+                JSON.stringify(cart)
+            );
+
+        }
+
+
+        function renderCart() {
+
+            const container =
+                document
+                    .getElementById("cartItems");
+
+
+            container.innerHTML = "";
+
+
+            let subtotal = 0;
+
+            let count = 0;
+
+
+            if (
+                cart.length === 0
+            ) {
+
+                container.innerHTML =
+                    "<p>Your cart is empty.</p>";
+
+            }
+
+
+            cart.forEach(item => {
+
+                subtotal +=
+                    item.price *
+                    item.quantity;
+
+
+                count +=
+                    item.quantity;
+
+
+                container.innerHTML += `
+
+                    <div class="cart-item">
+
+                        <div class="cart-item-left">
+
+                            <div class="cart-item-icon">
+
+                                ${item.image}
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="cart-item-name">
+
+                                    ${item.name}
+
+                                </div>
+
+
+                                <p style="margin-top:5px">
+
+                                    ₹${item.price}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="qty-control">
+
+                            <button
+                                onclick="changeQuantity(${item.id}, -1)"
+                            >
+                                −
+                            </button>
+
+
+                            <span>
+                                ${item.quantity}
+                            </span>
+
+
+                            <button
+                                onclick="changeQuantity(${item.id}, 1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            const delivery =
+                subtotal > 500 ||
+                subtotal === 0
+                    ? 0
+                    : 40;
+
+
+            document
+                .getElementById("subtotal")
+                .textContent =
+                subtotal;
+
+
+            document
+                .getElementById("delivery")
+                .textContent =
+                delivery;
+
+
+            document
+                .getElementById("total")
+                .textContent =
+                subtotal + delivery;
+
+
+            document
+                .getElementById("cartCount")
+                .textContent =
+                count;
+
+        }
+
+
+        function openCart() {
+
+            showLoader(
+                "Loading your cart..."
+            );
+
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("cartPanel")
+                    .classList
+                    .add("active");
+
+
+                document
+                    .getElementById("cartOverlay")
+                    .classList
+                    .remove("hidden");
+
+
+                hideLoader();
+
+            }, 500);
+
+        }
+
+
+        function closeCart() {
+
+            document
+                .getElementById("cartPanel")
+                .classList
+                .remove("active");
+
+
+            document
+                .getElementById("cartOverlay")
+                .classList
+                .add("hidden");
+
+        }
+
+
+        /* =========================
+           CHECKOUT
+        ========================= */
+
+        function goToCheckout() {
+
+            if (
+                cart.length === 0
+            ) {
+
+                showToast(
+                    "Please add products to cart first."
+                );
+
+                return;
+
+            }
+
+
+            showLoader(
+                "Preparing checkout..."
+            );
+
+
+            setTimeout(() => {
+
+                closeCart();
+
+
+                document
+                    .getElementById("checkout")
+                    .classList
+                    .remove("hidden");
+
+
+                hideLoader();
+
+
+                scrollToId(
+                    "checkout"
+                );
+
+            }, 800);
+
+        }
+
+
+        /* =========================
+           PLACE ORDER
+        ========================= */
+
+        function placeOrder() {
+
+            const name =
+                document
+                    .getElementById("fullName")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const address =
+                document
+                    .getElementById("address")
+                    .value
+                    .trim();
+
+
+            const payment =
+                document.querySelector(
+                    'input[name="payment"]:checked'
+                );
+
+
+            if (
+                !name ||
+                !email ||
+                !address ||
+                !payment
+            ) {
+
+                showToast(
+                    "Please complete all checkout details."
+                );
+
+                return;
+
+            }
+
+
+            showLoader(
+                "Processing your payment..."
+            );
+
+
+            setTimeout(() => {
+
+                const subtotal =
+                    cart.reduce(
+                        (total, item) =>
+                            total +
+                            (
+                                item.price *
+                                item.quantity
+                            ),
+                        0
+                    );
+
+
+                const delivery =
+                    subtotal > 500
+                        ? 0
+                        : 40;
+
+
+                const order = {
+
+                    id:
+                        "ORD-" +
+                        Date.now(),
+
+                    customer:
+                        name,
+
+                    email:
+                        email,
+
+                    address:
+                        address,
+
+                    payment:
+                        payment.value,
+
+                    items:
+                        [...cart],
+
+                    total:
+                        subtotal +
+                        delivery,
+
+                    status:
+                        "Order Confirmed",
+
+                    date:
+                        new Date()
+                            .toLocaleString(),
+
+                    returned:
+                        false
+
+                };
+
+
+                orders.unshift(order);
+
+
+                localStorage.setItem(
+                    "freshOrders",
+                    JSON.stringify(orders)
+                );
+
+
+                cart = [];
+
+
+                saveCart();
+
+
+                renderCart();
+
+
+                renderOrders();
+
+
+                document
+                    .getElementById("checkout")
+                    .classList
+                    .add("hidden");
+
+
+                hideLoader();
+
+
+                showToast(
+                    "🎉 Payment successful! Order placed."
+                );
+
+
+                scrollToId(
+                    "orders"
+                );
+
+            }, 1800);
+
+        }
+
+
+        /* =========================
+           ORDERS
+        ========================= */
+
+        function renderOrders() {
+
+            const container =
+                document
+                    .getElementById("ordersList");
+
+
+            container.innerHTML = "";
+
+
+            if (
+                orders.length === 0
+            ) {
+
+                container.innerHTML =
+                    `
+                    <div class="order-card">
+                        No orders placed yet.
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+
+            orders.forEach(order => {
+
+                const productsText =
+                    order.items
+                        .map(
+                            item =>
+                                item.name +
+                                " × " +
+                                item.quantity
+                        )
+                        .join(", ");
+
+
+                container.innerHTML += `
+
+                    <div
+                        class="order-card"
+                        data-order-id="${order.id}"
+                    >
+
+                        <div class="order-top">
+
+                            <div>
+
+                                <h3>
+                                    ${order.id}
+                                </h3>
+
+                                <p style="color:#777;margin-top:5px">
+
+                                    ${order.date}
+
+                                </p>
+
+                            </div>
+
+
+                            <div class="order-status">
+
+                                ${
+                                    order.returned
+                                        ? "Return Requested"
+                                        : order.status
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="order-info">
+
+                            <div>
+                                <strong>Customer:</strong>
+                                ${order.customer}
+                            </div>
+
+
+                            <div>
+                                <strong>Items:</strong>
+                                ${productsText}
+                            </div>
+
+
+                            <div>
+                                <strong>Payment:</strong>
+                                ${order.payment}
+                            </div>
+
+
+                            <div>
+                                <strong>Total:</strong>
+                                ₹${order.total}
+                            </div>
+
+                        </div>
+
+
+                        <div class="order-actions">
+
+                            <button
+                                class="track-order"
+                                onclick="trackOrder('${order.id}')"
+                            >
+                                Track Order
+                            </button>
+
+
+                            ${
+                                !order.returned
+                                    ?
+                                    `
+                                    <button
+                                        class="return-order"
+                                        onclick="returnOrder('${order.id}')"
+                                    >
+                                        Return Order
+                                    </button>
+                                    `
+                                    :
+                                    ""
+                            }
+
+                        </div>
+
+
+                        <div
+                            id="tracking-${order.id}"
+                        ></div>
+
+                    </div>
+
+                `;
+
+            });
+
+        }
+
+
+        function trackOrder(id) {
+
+            showLoader(
+                "Fetching order status..."
+            );
+
+
+            setTimeout(() => {
+
+                const box =
+                    document
+                        .getElementById(
+                            "tracking-" + id
+                        );
+
+
+                box.innerHTML = `
+
+                    <div class="tracking-box">
+
+                        <strong>
+                            Order Tracking
+                        </strong>
+
+
+                        <div class="tracking-steps">
+
+                            <div class="step active">
+
+                                <div class="step-circle">
+                                    ✓
+                                </div>
+
+                                Order Placed
+
+                            </div>
+
+
+                            <div class="step active">
+
+                                <div class="step-circle">
+                                    ✓
+                                </div>
+
+                                Confirmed
+
+                            </div>
+
+
+                            <div class="step active">
+
+                                <div class="step-circle">
+                                    ✓
+                                </div>
+
+                                Packed
+
+                            </div>
+
+
+                            <div class="step">
+
+                                <div class="step-circle">
+                                    4
+                                </div>
+
+                                Out for Delivery
+
+                            </div>
+
+
+                            <div class="step">
+
+                                <div class="step-circle">
+                                    5
+                                </div>
+
+                                Delivered
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                hideLoader();
+
+            }, 1000);
+
+        }
+
+
+        /* =========================
+           RETURN ORDER
+        ========================= */
+
+        function returnOrder(id) {
+
+            const reason =
+                prompt(
+                    "Enter return reason:"
+                );
+
+
+            if (!reason) return;
+
+
+            showLoader(
+                "Submitting return request..."
+            );
+
+
+            setTimeout(() => {
+
+                const order =
+                    orders.find(
+                        order =>
+                            order.id === id
+                    );
+
+
+                order.returned = true;
+
+
+                order.returnReason =
+                    reason;
+
+
+                localStorage.setItem(
+                    "freshOrders",
+                    JSON.stringify(orders)
+                );
+
+
+                renderOrders();
+
+
+                hideLoader();
+
+
+                showToast(
+                    "Return request submitted successfully."
+                );
+
+            }, 1200);
+
+        }
+
+
+        /* =========================
+           QA PLAYGROUND
+        ========================= */
+
+        function showAlert() {
+
+            alert(
+                "This is a test alert!"
+            );
+
+        }
+
+
+        function showConfirm() {
+
+            const result =
+                confirm(
+                    "Do you want to continue?"
+                );
+
+
+            showToast(
+                result
+                    ? "Confirmed"
+                    : "Cancelled"
+            );
+
+        }
+
+
+        function openNewTab() {
+
+            showLoader(
+                "Opening new tab..."
+            );
+
+
+            setTimeout(() => {
+
+                window.open(
+                    "about:blank",
+                    "_blank"
+                );
+
+
+                hideLoader();
+
+            }, 600);
+
+        }
+
+
+        function showFileName() {
+
+            showLoader(
+                "Uploading file..."
+            );
+
+
+            const input =
+                document
+                    .getElementById("fileUpload");
+
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("fileName")
+                    .textContent =
+                    input.files.length
+                        ?
+                        "Selected: " +
+                        input.files[0].name
+                        :
+                        "";
+
+
+                hideLoader();
+
+
+                showToast(
+                    "File selected successfully."
+                );
+
+            }, 700);
+
+        }
+
+
+        function toggleDynamicElement() {
+
+            showLoader(
+                "Loading dynamic element..."
+            );
+
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("dynamicElement")
+                    .classList
+                    .toggle("hidden");
+
+
+                hideLoader();
+
+            }, 600);
+
+        }
+
+
+        /* =========================
+           UTILITIES
+        ========================= */
+
+        function scrollToId(id) {
+
+            document
+                .getElementById(id)
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        }
+
+
+        function showToast(message) {
+
+            const toast =
+                document
+                    .getElementById("toast");
+
+
+            toast.textContent =
+                message;
+
+
+            toast
+                .classList
+                .remove("hidden");
+
+
+            setTimeout(() => {
+
+                toast
+                    .classList
+                    .add("hidden");
+
+            }, 2500);
+
+        }
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================= */
+
+        renderCart();
+        function updateOrderSummary() {
+
+    // Cart total
+    let basketValue = 0;
+
+    cart.forEach(item => {
+
+        basketValue += item.price * item.quantity;
+
+    });
+
+
+    // Charges
+    let deliveryCharge = 22;
+
+    let smallCartCharge = 0;
+
+    // Agar cart ₹100 se kam hai
+    if (basketValue < 100 && basketValue > 0) {
+
+        smallCartCharge = 15;
+
+    }
+
+
+    // Total calculation
+    let totalAmount =
+        basketValue +
+        deliveryCharge +
+        smallCartCharge;
+
+
+    // Savings
+    let savings = 30;
+
+
+    // Update UI
+    document.getElementById("basketValue").textContent =
+        "₹" + basketValue;
+
+
+    document.getElementById("deliveryCharge").textContent =
+        "₹" + deliveryCharge;
+
+
+    document.getElementById("smallCartCharge").textContent =
+        "₹" + smallCartCharge;
+
+
+    document.getElementById("totalAmount").textContent =
+        "₹" + totalAmount;
+
+
+    document.getElementById("totalSavings").textContent =
+        "₹" + savings;
+
+}
+document.getElementById("placeOrderBtn").addEventListener("click", function () {
+
+    const paymentMethod = document.querySelector(
+        'input[name="payment"]:checked'
+    );
+
+    if (!paymentMethod) {
+        alert("Please select a payment method");
+        return;
+    }
+
+    // UPI
+    if (paymentMethod.value === "UPI") {
+        showPaymentForm("upi");
+    }
+
+    // Card
+    else if (paymentMethod.value === "Card") {
+        showPaymentForm("card");
+    }
+
+    // Net Banking
+    else if (paymentMethod.value === "Net Banking") {
+        showPaymentForm("bank");
+    }
+
+    // Cash On Delivery
+    else if (paymentMethod.value === "Cash on Delivery") {
+        completeDummyPayment("Cash on Delivery");
+    }
+
+});
+let selectedPaymentMethod = "";
+
+
+/* SHOW PAYMENT FORM */
+
+function showPaymentForm(type) {
+
+    document
+        .getElementById("dummyPaymentModal")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("upiPaymentForm")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("cardPaymentForm")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("bankPaymentForm")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("paymentProcessing")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("paymentSuccess")
+        .classList.add("hidden");
+
+
+    if (type === "upi") {
+
+        document
+            .getElementById("upiPaymentForm")
+            .classList.remove("hidden");
+
+    }
+
+
+    if (type === "card") {
+
+        document
+            .getElementById("cardPaymentForm")
+            .classList.remove("hidden");
+
+    }
+
+
+    if (type === "bank") {
+
+        document
+            .getElementById("bankPaymentForm")
+            .classList.remove("hidden");
+
+    }
+
+}
+function processDummyPayment(method) {
+
+    selectedPaymentMethod = method;
+
+
+    // CARD VALIDATION
+
+    if (method === "Card") {
+
+        const cardNumber =
+            document.getElementById("cardNumber").value;
+
+        const cardName =
+            document.getElementById("cardName").value;
+
+        const cvv =
+            document.getElementById("cvv").value;
+
+
+        if (
+            cardNumber.length < 12 ||
+            cardName === "" ||
+            cvv.length < 3
+        ) {
+
+            alert("Please enter valid card details");
+
+            return;
+
+        }
+
+    }
+
+
+    // UPI VALIDATION
+
+    if (method === "UPI") {
+
+        const upi =
+            document.getElementById("upiId").value;
+
+
+        if (
+            upi === "" ||
+            !upi.includes("@")
+        ) {
+
+            alert("Please enter valid UPI ID");
+
+            return;
+
+        }
+
+    }
+
+
+    // BANK VALIDATION
+
+    if (method === "Net Banking") {
+
+        const bank =
+            document.getElementById("bankName").value;
+
+
+        if (bank === "") {
+
+            alert("Please select a bank");
+
+            return;
+
+        }
+
+    }
+
+
+    startPaymentProcessing(method);
+
+}
+function startPaymentProcessing(method) {
+
+    // Hide all forms
+
+    document
+        .getElementById("upiPaymentForm")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("cardPaymentForm")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("bankPaymentForm")
+        .classList.add("hidden");
+
+
+    // Show loader
+
+    document
+        .getElementById("paymentProcessing")
+        .classList.remove("hidden");
+
+
+    // Dummy payment delay
+
+    setTimeout(function () {
+
+        completeDummyPayment(method);
+
+    }, 3000);
+
+}
+function completeDummyPayment(method) {
+
+    const orderId =
+        "BB" +
+        Math.floor(
+            100000 + Math.random() * 900000
+        );
+
+
+    // Hide processing
+
+    document
+        .getElementById("paymentProcessing")
+        .classList.add("hidden");
+
+
+    // Show success
+
+    document
+        .getElementById("paymentSuccess")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("successOrderId")
+        .textContent = orderId;
+
+
+    document
+        .getElementById("successPaymentMethod")
+        .textContent = method;
+
+
+    // Save order
+
+    const order = {
+
+        id: orderId,
+
+        paymentMethod: method,
+
+        status: "Order Placed",
+
+        date: new Date().toLocaleString(),
+
+        total:
+            document
+                .getElementById("totalAmount")
+                .textContent
+
+    };
+
+
+    // Local storage
+
+    let orders =
+        JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+
+
+    orders.push(order);
+
+
+    localStorage.setItem(
+        "orders",
+        JSON.stringify(orders)
+    );
+
+
+    console.log(
+        "Order Created:",
+        order
+    );
+
+}
+document
+.getElementById("continueShoppingBtn")
+.addEventListener("click", function () {
+
+    document
+        .getElementById("dummyPaymentModal")
+        .classList.add("hidden");
+
+
+    // Cart empty
+
+    cart = [];
+
+
+    // Save updated cart
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+
+    // Update UI
+
+    if (typeof renderCart === "function") {
+
+        renderCart();
+
+    }
+
+
+    if (
+        typeof updateOrderSummary === "function"
+    ) {
+
+        updateOrderSummary();
+
+    }
+
+
+    // Go to products
+
+    document
+        .getElementById("products")
+        ?.scrollIntoView({
+            behavior: "smooth"
+        });
+
+});
+document
+.getElementById("closePaymentModal")
+.addEventListener("click", function () {
+
+    document
+        .getElementById("dummyPaymentModal")
+        .classList.add("hidden");
+
+});
+    </script>
+
+</body>
+</html>
