@@ -373,57 +373,76 @@
            HERO
         ========================= */
 
-        .hero {
-            padding: 40px 0;
-        }
+     /* =========================
+   HERO SECTION
+========================= */
 
-        .hero-banner {
-            min-height: 370px;
-            border-radius: 24px;
-            padding: 60px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background:
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,.2), transparent 20%),
-                linear-gradient(120deg, #1f6b2b, #65af68);
-        }
+.hero-section {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 350px;
 
-        .hero-content {
-            max-width: 580px;
-        }
+    margin: 0 auto;
+    padding: 50px 60px;
 
-        .hero-tag {
-            padding: 8px 14px;
-            background: rgba(255, 255, 255, .15);
-            border-radius: 20px;
-            font-size: 12px;
-        }
+    box-sizing: border-box;
 
-        .hero h1 {
-            font-size: 50px;
-            margin: 20px 0;
-            line-height: 1.1;
-        }
+    border-radius: 24px;
+    overflow: hidden;
 
-        .hero p {
-            line-height: 1.7;
-            font-size: 16px;
-        }
+    color: white;
 
-        .hero button {
-            margin-top: 25px;
-            padding: 15px 25px;
-            background: white;
-            color: var(--green);
-            border-radius: 9px;
-            font-weight: bold;
-        }
+    display: flex;
+    align-items: center;
 
-        .hero-art {
-            font-size: 130px;
-        }
+    background-image: url("https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=2700/layout-engine/2026-01/Frame-1437256605-2-2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 580px;
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 14px;
+
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+
+    font-size: 12px;
+}
+
+.hero-section h1 {
+    font-size: 50px;
+    margin: 20px 0;
+    line-height: 1.1;
+}
+
+.hero-section p {
+    line-height: 1.7;
+    font-size: 16px;
+    margin: 0;
+}
+
+.shop-btn {
+    margin-top: 25px;
+    padding: 15px 25px;
+
+    background: white;
+    color: var(--green);
+
+    border: none;
+    border-radius: 9px;
+
+    font-weight: bold;
+    cursor: pointer;
+}
 
 
         /* =========================
@@ -1991,46 +2010,27 @@
 
         <!-- HERO -->
 
-        <section class="hero">
+       <section class="hero-section">
 
-            <div class="container">
+    <div class="hero-content">
 
-                <div class="hero-banner">
+        <span class="hero-badge">
+            
+        </span>
 
-                    <div class="hero-content">
+        <h1>
+            
+        </h1>
 
-                        <span class="hero-tag">
-                            QA AUTOMATION PRACTICE PROJECT
-                        </span>
+        <p>
+            
+        </p>
 
+       
 
-                        <h1>
-                            Freshness you can trust.
-                        </h1>
+    </div>
 
-
-                        <p>
-                            Shop fresh groceries and practice real-world
-                            e-commerce automation workflows.
-                        </p>
-
-
-                        <button
-                            onclick="scrollToId('products')"
-                        >
-                            Shop Now →
-                        </button>
-
-                    </div>
-
-
-                    <div class="hero-art">
-                        🛒🥬🍎
-                    </div>
-
-                </div>
-
-            </div>
+</section>
 
         </section>
 
