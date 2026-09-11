@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Track Order | FreshBasket</title><style>
+:root{--green:#2f7d32;--dark:#1f5e24;--orange:#ff7a00;--border:#e5e7eb;--muted:#6b7280;--bg:#f6f7f6;--danger:#dc2626;--blue:#0b6fa4}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#202124}
+.header{padding:17px 4%;background:#fff;border-bottom:1px solid var(--border)}
+.brand{color:var(--dark);font-size:22px;font-weight:bold;text-decoration:none}
+.brand span{color:var(--orange)}
+.container{width:min(1020px,94%);margin:30px auto 60px}
+.back{color:var(--dark);font-weight:bold;text-decoration:none}
+.hidden{display:none!important}
+.loader{margin:26px auto;text-align:center;background:#fff;border:1px solid var(--border);border-radius:14px;padding:46px 20px}
+.loader h3{margin:0 0 6px}
+.spinner{width:56px;height:56px;border:6px solid #e5e7eb;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader p{color:var(--muted);font-size:14px;margin:0}
+.track-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin:18px 0}
+.track-head h1{margin:0 0 6px;font-size:26px}
+.oid{margin:0;color:var(--muted);font-size:14px}
+.head-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.live{display:inline-flex;align-items:center;gap:6px;background:#eaf7ea;color:var(--green);font-weight:bold;font-size:12px;padding:7px 12px;border-radius:20px}
+.live i{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.pill{padding:7px 12px;border-radius:20px;font-size:12px;font-weight:bold;background:#eaf7ea;color:var(--green)}
+.pill.pick{background:#fff4e5;color:#b45309}.pill.way{background:#e8f3fb;color:var(--blue)}
+.pill.done{background:#eaf7ea;color:var(--green)}.pill.cancel{background:#fdecec;color:var(--danger)}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:start}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
+.card h2{margin:0 0 14px;font-size:18px}
+.card h2 small{color:var(--muted);font-weight:normal;font-size:12px}
+svg.map{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--border)}
+.map-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
+.map-legend b{color:#202124}
+.dotk{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.updated{margin:10px 0 0;font-size:12px;color:var(--muted)}
+.partner{display:flex;gap:14px;align-items:center}
+.avatar{width:60px;height:60px;border-radius:50%;color:#fff;font-weight:bold;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.partner .who{flex:1;min-width:0}
+.partner .who strong{display:block;font-size:16px}
+.partner .who .role{color:var(--muted);font-size:13px}
+.partner .who .meta{color:var(--muted);font-size:12px;margin-top:4px}
+.call-btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;font-weight:bold;text-decoration:none;border-radius:9px;padding:11px 16px;font-size:14px;border:0;white-space:nowrap}
+.call-btn:hover{background:var(--dark)}
+.partner-status{margin-top:12px;background:#f7f9f7;border-radius:9px;padding:11px 13px;font-size:13px;color:var(--dark);line-height:1.6}
+.steps{list-style:none;margin:0;padding:0}
+.step{display:flex;gap:13px;position:relative;padding:0 0 22px 0}
+.step:last-child{padding-bottom:0}
+.step::before{content:"";position:absolute;left:17px;top:38px;bottom:-2px;width:2px;background:var(--border)}
+.step:last-child::before{display:none}
+.step.done::before{background:var(--green)}
+.sdot{width:36px;height:36px;border-radius:50%;background:#eef1ee;color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0;z-index:1}
+.step.done .sdot{background:var(--green);color:#fff}
+.step.active .sdot{background:#fff;border:3px solid var(--green);color:var(--green);animation:ring 1.4s infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(47,125,50,.35)}70%{box-shadow:0 0 0 10px rgba(47,125,50,0)}100%{box-shadow:0 0 0 0 rgba(47,125,50,0)}}
+.step .stitle{font-weight:bold;font-size:15px}
+.step .ssub{color:var(--muted);font-size:13px;margin-top:3px;line-height:1.5}
+.step.active .stitle{color:var(--dark)}
+.replay{margin-top:14px;background:#fff;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer}
+.replay:hover{color:var(--dark);border-color:var(--dark)}
+.notice{margin:0 0 18px;padding:13px 15px;border-radius:10px;font-size:13px;line-height:1.6;background:#fff8e6;border:1px solid #f0dfae;color:#8a5a00}
+.addr{font-size:14px;line-height:1.7}
+.addr .lbl{font-weight:bold;color:var(--dark)}
+.titem{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.titem:last-child{border-bottom:0}
+.thumb{width:54px;height:54px;border-radius:9px;object-fit:cover;background:#f1f5f1;flex-shrink:0}
+.thumb-fallback{width:54px;height:54px;border-radius:9px;background:#eef6ee;display:none;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.titem .nm{flex:1;font-size:14px;min-width:0}
+.titem .nm small{color:var(--muted)}
+.titem .pr{font-weight:bold;white-space:nowrap}
+.srow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+.srow:last-child{border-bottom:0}
+.srow span{color:var(--muted)}
+.srow.total{font-size:16px;font-weight:bold}.srow.total span{color:#202124}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.btn-primary{background:var(--green);color:#fff;font-weight:bold;border:0;border-radius:9px;padding:13px 20px;font-size:15px;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:var(--dark)}
+.btn-ghost{background:#fff;border:1px solid var(--border);color:var(--dark);font-weight:bold;border-radius:9px;padding:13px 20px;font-size:15px;text-decoration:none;display:inline-block}
+.state-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:40px 26px;text-align:center}
+.state-card .big{font-size:52px}
+.state-card h2{margin:14px 0 8px}
+.state-card p{color:var(--muted);margin:0 0 18px;line-height:1.6}
+.lookup{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.lookup input{padding:12px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:15px;min-width:min(320px,80vw)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#202124;color:#fff;padding:13px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:92vw;text-align:center}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.track-head h1{font-size:23px}}
+@media(max-width:600px){.container{margin:20px auto 50px}.track-head{flex-direction:column}.card{padding:16px}.partner{flex-wrap:wrap}.call-btn{width:100%;justify-content:center}.actions .btn-primary,.actions .btn-ghost{flex:1;text-align:center}}
+</style></head><body><header class="header"><a class="brand" href="index.html">Fresh<span>Basket</span></a></header>
+<main class="container" id="page"></main>
+<script>
+(function(){
+'use strict';
+var DEMO_MIN = 60000;
+var page = document.getElementById('page');
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function money(n){n=Number(n||0);return '\u20B9'+(isFinite(n)?n.toLocaleString('en-IN'):0)}
+function getOrders(){try{return JSON.parse(localStorage.getItem('freshOrders'))||[]}catch(e){return[]}}
+function saveOrders(list){try{localStorage.setItem('freshOrders',JSON.stringify(list))}catch(e){}}
+function partnerFor(id){var partners=[{name:'Ravi Kumar',phone:'98765 43210',rating:'4.8',trips:'2,340'},{name:'Amit Sharma',phone:'98110 22334',rating:'4.9',trips:'1,875'},{name:'Vikash Yadav',phone:'98990 11223',rating:'4.7',trips:'3,102'}];var h=0;id=String(id||'');for(var i=0;i<id.length;i++){h=(h*31+id.charCodeAt(i))%997}var p=partners[h%partners.length];var parts=p.name.split(' ');return {name:p.name,phone:p.phone,rating:p.rating,trips:p.trips,initials:(parts[0][0]+(parts[1]?parts[1][0]:'')).toUpperCase()}}
+function avatarColor(name){var colors=['#2f7d32','#0b6fa4','#7c3aed','#b45309','#be123c'];var h=0;name=String(name||'');for(var i=0;i<name.length;i++){h=(h*29+name.charCodeAt(i))%997}return colors[h%colors.length]}
+function parseOrderTime(o){var t=Date.parse(o&&o.date);return isNaN(t)?Date.now():t}
+function fmtTime(ts){try{var d=new Date(ts);var h=d.getHours(),m=d.getMinutes(),ap=h>=12?'PM':'AM';h=h%12;if(h===0)h=12;return h+':'+(m<10?'0':'')+m+' '+ap}catch(e){return'--'}}
+function fmtDateTime(ts){try{var d=new Date(ts);return d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+', '+fmtTime(ts)}catch(e){return'--'}}
+function stageState(order){var s=String(order.status||'Order Confirmed').toLowerCase();
+if(s.indexOf('cancel')!==-1)return 'cancelled';
+if(s.indexOf('deliver')!==-1&&s.indexOf('out')===-1)return 'delivered';
+if(s.indexOf('way')!==-1||s.indexOf('out for')!==-1||s.indexOf('transit')!==-1||s.indexOf('shipped')!==-1)return 'onway';
+if(s.indexOf('pick')!==-1||s.indexOf('pack')!==-1||s.indexOf('prepar')!==-1||s.indexOf('confirm')!==-1||s.indexOf('placed')!==-1)return 'picking';
+return 'picking'}
+function simTimes(order,state){var base=parseOrderTime(order);var t1=base+10*DEMO_MIN,t2=base+20*DEMO_MIN,t3=base+30*DEMO_MIN;
+if(state==='delivered'){var done=order.deliveredAt||order.updatedAt||t3;t3=done;t2=Math.min(t2,done-5*DEMO_MIN);t1=Math.min(t1,done-10*DEMO_MIN)}
+return {pick:t1,way:t2,done:t3}}
+function statusMessage(state,remainMs,doneTs){if(state==='picking')return 'Your items are being picked and packed at the FreshBasket store.';
+if(state==='onway'){var m=Math.max(1,Math.ceil(remainMs/DEMO_MIN));return 'Your order is on the way. Arriving in about '+m+' min.'}
+return 'Delivered on '+fmtDateTime(doneTs)+'. Enjoy your fresh groceries!'}
+function routePoint(order,state,nowMs){var H=0;var seed=String(order.id||'');for(var i=0;i<seed.length;i++){H=(H*37+seed.charCodeAt(i))%997}
+var sway=((H%60)-30)/20;
+var x0=150,y0=255,x3=600,y3=95;
+var x1=290+sway*10,y1=225,x2=450-sway*8,y2=105;
+function cubic(t,ax,bx,cx,dx){var u=1-t;return u*u*u*ax+3*u*u*t*bx+3*u*t*t*cx+t*t*t*dx}
+var frac=0;
+if(state==='picking'){frac=0}
+else if(state==='delivered'){frac=1}
+else{var t=simTimes(order,state);var start=t.pick,end=t.done;if(end<=start)end=start+1;frac=(nowMs-start)/(end-start);if(!(frac>=0))frac=0;if(frac>0.98)frac=0.98}
+return {x:cubic(frac,x0,x1,x2,x3),y:cubic(frac,y0,y1,y2,y3),frac:frac,s1:{x:x1,y:y1},s2:{x:x2,y:y2},sx:x0,sy:y0,dx:x3,dy:y3}}
+function buildMap(order,state,nowMs){var W=760,H=340;
+function road(x,y,w,h){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="7" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>'}
+var parkX=180+((parseOrderTime(order)/DEMO_MIN)%40),parkY=170;
+var marker=routePoint(order,state,nowMs);
+var mx=marker.x,my=marker.y,f=marker.frac;
+var s='<svg class="map" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Delivery route map">';
+s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#eef3ec"/>';
+s+='<rect x="30" y="30" width="150" height="90" rx="10" fill="#e4ecdf"/>';
+s+='<rect x="600" y="220" width="130" height="85" rx="10" fill="#e4ecdf"/>';
+s+='<rect x="330" y="40" width="120" height="60" rx="9" fill="#e7edf5"/>';
+s+='<rect x="500" y="150" width="90" height="55" rx="9" fill="#e7edf5"/>';
+s+='<rect x="100" y="210" width="90" height="55" rx="9" fill="#e7edf5"/>';
+s+=road(0,120,W,34)+road(0,250,W,30)+road(210,0,30,H)+road(520,0,30,H);
+s+='<rect x="'+parkX+'" y="'+parkY+'" width="72" height="34" rx="8" fill="#dfe9dc"/>';
+s+='<text x="'+(parkX+36)+'" y="'+(parkY+22)+'" text-anchor="middle" font-size="12" fill="#5b7d57">Park</text>';
+s+='<path d="M '+marker.sx+' '+marker.sy+' C '+marker.s1.x+' '+marker.s1.y+', '+marker.s2.x+' '+marker.s2.y+', '+marker.dx+' '+marker.dy+'" fill="none" stroke="#dc2626" stroke-width="5" stroke-linecap="round" stroke-dasharray="13 11"/>';
+s+='<circle cx="'+marker.sx+'" cy="'+marker.sy+'" r="14" fill="#2f7d32" stroke="#fff" stroke-width="4"/>';
+s+='<text x="'+marker.sx+'" y="'+(marker.sy+5)+'" text-anchor="middle" font-size="13" fill="#fff" font-weight="bold">S</text>';
+s+='<text x="'+marker.sx+'" y="'+(marker.sy+34)+'" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1f5e24">Store</text>';
+s+='<circle cx="'+marker.dx+'" cy="'+marker.dy+'" r="14" fill="#0b6fa4" stroke="#fff" stroke-width="4"/>';
+s+='<text x="'+marker.dx+'" y="'+(marker.dy+5)+'" text-anchor="middle" font-size="13" fill="#fff" font-weight="bold">H</text>';
+s+='<text x="'+marker.dx+'" y="'+(marker.dy+34)+'" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0b6fa4">Home</text>';
+if(state!=='delivered'){s+='<circle cx="'+mx+'" cy="'+my+'" r="17" fill="rgba(220,38,38,.18)"><animate attributeName="r" values="12;19;12" dur="1.6s" repeatCount="indefinite"/></circle>';
+s+='<g><circle cx="'+mx+'" cy="'+my+'" r="10" fill="#dc2626" stroke="#fff" stroke-width="3"/>';
+s+='<text x="'+mx+'" y="'+(my+14)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c" stroke="#fff" stroke-width="3" paint-order="stroke">Rider</text></g>'}
+s+='<text x="20" y="28" font-size="12" font-weight="bold" fill="#41543f">FreshBasket delivery zone</text>';
+s+='<text x="20" y="324" font-size="11.5" fill="#64748b">Live demo map \u2022 route updates with order status</text>';
+s+='</svg>';
+return {svg:s}}
+function toast(msg){var old=document.querySelector('.toast');if(old)old.remove();var d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(function(){d.remove()},2600)}
+var timers=[];var startedAt=Date.now();
+function clearTimers(){timers.forEach(function(t){clearTimeout(t);clearInterval(t)});timers=[]}
+function getId(){try{var u=new URL(window.location.href);var v=u.searchParams.get('orderId')||u.searchParams.get('id');if(v)return v}catch(e){}try{var m=location.search.match(/[?&](orderId|id)=([^&]+)/);if(m)return decodeURIComponent(m[2])}catch(e2){}return ''}
+function findOrder(id){var list=getOrders();for(var i=0;i<list.length;i++){if(String(list[i].id)===String(id))return {order:list[i],list:list,index:i}}return null}
+function thumb(item){var img=(item&&item.image)||'';var nm=esc((item&&item.name)||'Item');
+if(img)return '<img class="thumb" src="'+esc(img)+'" alt="'+nm+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><span class="thumb-fallback" aria-hidden="true">\uD83E\uDD6C</span>';
+return '<span class="thumb-fallback" style="display:flex" aria-hidden="true">\uD83E\uDD6C</span>'}
+function pillFor(state){if(state==='picking')return '<span class="pill pick">Order Picking</span>';
+if(state==='onway')return '<span class="pill way">On the Way</span>';
+if(state==='delivered')return '<span class="pill done">Delivered</span>';
+return '<span class="pill cancel">Cancelled</span>'}
+function stepList(state,t,pickDone,wayDone,allDone){function row(key,num,icon,title,sub){
+var cls=key===state?'step active':(((key==='picking'&&(pickDone||wayDone||allDone))||(key==='onway'&&(wayDone||allDone))||(key==='delivered'&&allDone))?'step done':'step');
+var dot=(cls==='step done')?'\u2713':((cls==='step active')?icon:String(num));
+return '<li class="'+cls+'"><span class="sdot">'+dot+'</span><div><div class="stitle">'+title+'</div><div class="ssub">'+sub+'</div></div></li>'}
+return '<ol class="steps">'
++row('picking',1,'\uD83D\uDCE6','Order Picking','Packed by '+fmtTime(t.pick)+' \u2022 store is preparing your items')
++row('onway',2,'\uD83D\uDEF5','On the Way','Rider left the store \u2022 expected by '+fmtTime(t.done))
++row('delivered',3,'\u2713','Delivered','Arrived by '+fmtTime(t.done)+' \u2022 enjoy your groceries')
++'</ol>'}
+function itemsHtml(order){var items=order.items||[];if(!items.length)return '<p style="color:var(--muted);font-size:14px;margin:0">No item details saved for this order.</p>';
+return items.map(function(it){var qty=Number(it.quantity||1);var pr=Number(it.price||0)*qty;
+return '<div class="titem">'+thumb(it)+'<div class="nm"><div><strong>'+esc(it.name||'Item')+'</strong></div><small>Qty '+qty+' \u00D7 '+money(it.price||0)+'</small></div><div class="pr">'+money(pr)+'</div></div>'}).join('')}
+function addrHtml(order){var who=esc(order.customer||order.name||'Customer');
+var lines=[];if(order.address)lines.push(esc(order.address));
+else{var parts=[];if(order.city)parts.push(order.city);if(order.pincode)parts.push(order.pincode);if(parts.length)lines.push(esc(parts.join(' - ')))}
+if(order.mobile)lines.push('Phone: '+esc(order.mobile));
+if(order.email)lines.push('Email: '+esc(order.email));
+if(!lines.length)lines.push('Address was not saved with this order. Our rider will call you for directions.');
+return '<div class="addr"><div><span class="lbl">Deliver to: </span><strong>'+who+'</strong></div><div style="margin-top:6px;color:#4b5563">'+lines.join('<br>')+'</div></div>'}
+function showLoading(id){clearTimers();page.innerHTML='<a class="back" href="orders.html">\u2190 Back to Orders</a>'
++'<div class="loader"><div class="spinner"></div><h3>Fetching live order status\u2026</h3><p>Contacting the store and your delivery partner for '+(id?esc(id):'your order')+'.</p></div>'}
+function showInvalid(id){clearTimers();page.innerHTML='<a class="back" href="orders.html">\u2190 Back to Orders</a>'
++'<div class="track-head"><div><h1>Live Order Tracking</h1><p class="oid">We could not find this order.</p></div></div>'
++'<div class="state-card"><div class="big">\uD83D\uDD0D</div><h2>Order '+(id?esc(id):'')+' not found</h2><p>Please check the Order ID. IDs look like <strong>ORD-1730000000000</strong> and are saved on this device after checkout.</p>'
++'<div class="lookup"><input id="lookupId" placeholder="Enter Order ID, e.g. ORD-1730000000000" value="'+esc(id||'')+'"><button class="btn-primary" id="lookupGo" type="button">Track</button></div>'
++'<div class="actions" style="justify-content:center"><a class="btn-ghost" href="orders.html">Back to Orders</a><a class="btn-primary" href="index.html#products">Continue Shopping</a></div></div>';
+wireLookup()}
+function wireLookup(){var b=document.getElementById('lookupGo');var f=document.getElementById('lookupId');if(!b||!f)return;
+function go(){var v=f.value.trim();if(!v){toast('Please enter an Order ID.');return}location.search='?orderId='+encodeURIComponent(v)}
+b.onclick=go;f.addEventListener('keydown',function(e){if(e.key==='Enter')go()})}
+function showCancelled(order){clearTimers();var p=partnerFor(order.id);
+page.innerHTML='<a class="back" href="orders.html">\u2190 Back to Orders</a>'
++'<div class="track-head"><div><h1>Live Order Tracking</h1><p class="oid">'+esc(order.id)+' \u2022 placed '+(order.date?esc(order.date):'recently')+'</p></div><div class="head-right"><span class="pill cancel">Cancelled</span></div></div>'
++'<div class="state-card"><div class="big">\u274C</div><h2>This order was cancelled</h2><p>'+esc(order.cancelReason||order.reason||'The order was cancelled and no delivery is in progress.')+'<br>Amount '+(order.total!=null?('<strong>'+money(order.total)+'</strong> via '+esc(order.payment||order.paymentMethod||'original method')):'')+' will be refunded as per store policy.</p>'
++'<div class="actions" style="justify-content:center"><a class="btn-ghost" href="orders.html">Back to Orders</a><a class="btn-primary" href="index.html#products">Order Again</a></div></div>'
++'<div class="card" style="margin-top:18px"><h2>Order summary</h2>'+itemsHtml(order)+'</div>'}
+function frame(order,state,nowMs,t){var p=partnerFor(order.id);var doneTs=(state==='delivered')?(order.deliveredAt||order.updatedAt||t.done):t.done;
+var remain=Math.max(0,doneTs-nowMs);var mins=Math.max(1,Math.ceil(remain/DEMO_MIN));
+var eta=state==='picking'?('Ready in ~10 min \u2022 arriving by '+fmtTime(t.done)):((state==='onway')?('Arriving in ~'+mins+' min \u2022 by '+fmtTime(t.done)):('Delivered at '+fmtTime(doneTs)));
+var head=state==='picking'?'Your order is being packed':(state==='onway'?'Your order is on the way':'Order delivered');
+var m=buildMap(order,state,nowMs);
+var stepsDone=state==='delivered'?{a:1,b:1,c:1}:(state==='onway'?{a:1,b:0,c:0}:{a:0,b:0,c:0});
+var h='<a class="back" href="orders.html">\u2190 Back to Orders</a>'
++'<div class="track-head"><div><h1>'+head+'</h1><p class="oid">'+esc(order.id)+' \u2022 placed '+(order.date?esc(order.date):'recently')+'</p></div>'
++'<div class="head-right"><span class="live"><i></i>LIVE</span>'+pillFor(state)+'</div></div>';
+if(state!=='delivered')h+='<p class="notice" id="demoNote">\uD83D\uDEA8 <strong>Live demo:</strong> status auto-updates every few seconds: <strong>Order Picking \u2192 On the Way \u2192 Delivered</strong>. Watch the rider move along the red dashed route.</p>';
+h+='<div class="grid"><div>'
++'<div class="card"><h2>Live map <small>\u2022 delivery area</small></h2><div id="mapSlot">'+m.svg+'</div>'
++'<div class="map-legend"><span><span class="dotk" style="background:#2f7d32"></span><b>Store</b></span><span><span class="dotk" style="background:#dc2626"></span><b style="color:#dc2626">- - -</b> delivery route</span><span><span class="dotk" style="background:#dc2626"></span><b>Rider</b> current location</span><span><span class="dotk" style="background:#0b6fa4"></span><b>Home</b></span></div>'
++'<p class="updated" id="updLine">Updated just now \u2022 ETA: '+esc(eta)+'</p></div>'
++'<div class="card"><h2>Delivery partner</h2><div class="partner"><div class="avatar" style="background:'+avatarColor(p.name)+'">'+esc(p.initials)+'</div>'
++'<div class="who"><strong>'+esc(p.name)+'</strong><div class="role">Delivery Partner \u2022 \u2605 '+esc(p.rating)+' \u2022 '+esc(p.trips)+' deliveries</div><div class="meta">Vehicle: Bike \u2022 reachable during this delivery</div></div>'
++'<a class="call-btn" id="callTop" href="tel:'+esc(p.phone.replace(/\s/g,''))+'">\uD83D\uDCDE Call</a></div>'
++'<div class="partner-status" id="partnerMsg">'+esc(state==='picking'?('Waiting at the store counter for your packed bag.'):((state==='onway')?('Picked up your bag and is riding to your home.'):'Handed over your bag. Thank you for shopping with FreshBasket!'))+'</div></div>'
++'<div class="card"><h2>Delivery address</h2>'+addrHtml(order)+'</div>'
++'</div><div>'
++'<div class="card"><h2>Order progress</h2><div id="stepsSlot">'+stepList(state,t,stepsDone.a,stepsDone.b,stepsDone.c)+'</div>'
++'<div style="margin-top:12px;font-size:13px;color:var(--muted)">Estimated delivery: <strong style="color:var(--dark)">'+esc(eta)+'</strong></div>'
++(state!=='delivered'?'<button class="replay" id="replayBtn" type="button">\u21BA Replay demo</button>':'')
++'</div>'
++'<div class="card"><h2>Items in this order</h2>'+itemsHtml(order)+'</div>'
++'<div class="card"><h2>Order summary</h2>'
++'<div class="srow"><span>Order ID</span><strong>'+esc(order.id)+'</strong></div>'
++'<div class="srow"><span>Total amount</span><strong>'+money(order.total)+'</strong></div>'
++'<div class="srow"><span>Payment method</span><strong>'+esc(order.payment||order.paymentMethod||'Not saved')+'</strong></div>'
++'<div class="srow"><span>Order date</span><strong>'+esc(order.date||'—')+'</strong></div></div>'
++'<div class="actions"><a class="btn-ghost" href="orders.html">Back to Orders</a><button class="btn-primary" id="callMain" type="button">\uD83D\uDCDE Call Delivery Partner</button></div>'
++'</div></div>';
+return {html:h,partner:p}}
+function callDemo(p){toast('Calling '+p.name+' ('+p.phone+')\u2026 This is a demo call.');
+try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
+setTimeout(function(){toast(p.name+' is on the way and will reach you soon. \uD83D\uDEF5')},1800)}
+function runLive(found){clearTimers();startedAt=Date.now();var order=found.order;
+function persist(fr){try{fr.list[fr.index]=order;saveOrders(fr.list)}catch(e){}}
+var state=stageState(order);if(order.returned)state='cancelled';
+if(state==='cancelled'){showCancelled(order);return}
+var step=state==='picking'?0:(state==='onway'?1:2);
+if(order.deliveredAt||String(order.status||'').toLowerCase().indexOf('deliver')!==-1&&String(order.status||'').toLowerCase().indexOf('out')===-1){step=2;state='delivered'}
+function schedule(){clearTimers();
+timers.push(setTimeout(function(){if(step===0){step=1;state='onway';order.status='On the Way';persist(found);paintLive();toast('Update: your order is On the Way \uD83D\uDEF5')}},4000));
+timers.push(setTimeout(function(){step=2;state='delivered';order.status='Delivered';order.deliveredAt=Date.now();order.updatedAt=Date.now();persist(found);paintLive();toast('\u2705 Delivered! Enjoy your fresh groceries.');var iv=timers[2];if(iv)clearInterval(iv)},9000));
+timers.push(setInterval(function(){if(state==='delivered')return;var mp=document.getElementById('mapSlot');var up=document.getElementById('updLine');if(!mp)return;var nowM=Date.now();mp.innerHTML=buildMap(order,state,nowM).svg;if(up){var tt=simTimes(order,state);var doneT=(state==='delivered')?(order.deliveredAt||tt.done):tt.done;var mins=Math.max(1,Math.ceil(Math.max(0,doneT-nowM)/DEMO_MIN));var etaT=(state==='picking'?('Ready in ~10 min \u2022 arriving by '+fmtTime(tt.done)):('Arriving in ~'+mins+' min \u2022 by '+fmtTime(tt.done)));up.textContent='Updating live\u2026 ETA: '+etaT}},1000))}
+function paintLive(){var nowMs=Date.now();var t=simTimes(order,state);var f=frame(order,state,nowMs,t);
+page.innerHTML=f.html;
+var cb=document.getElementById('callMain');if(cb)cb.onclick=function(){callDemo(f.partner)};
+var ct=document.getElementById('callTop');if(ct)ct.addEventListener('click',function(){toast('Calling '+f.partner.name+' ('+f.partner.phone+')\u2026 This is a demo call.')});
+var rb=document.getElementById('replayBtn');if(rb)rb.onclick=function(){order.status='Order Confirmed';try{delete order.deliveredAt}catch(e){}persist(found);state='picking';step=0;startedAt=Date.now();paintLive();schedule();toast('Demo restarted: Order Picking \u2192 On the Way \u2192 Delivered.')}}
+paintLive();if(state!=='delivered')schedule()
+}
+function boot(){var id=getId();if(!id){var all=getOrders();if(all.length){location.replace('track-order.html?orderId='+encodeURIComponent(all[0].id));return}showInvalid('');return}
+showLoading(id);
+timers.push(setTimeout(function(){var found=findOrder(id);if(!found){showInvalid(id);return}runLive(found)},900));
+window.addEventListener('beforeunload',clearTimers);}
+boot();
+})();
+</script></body></html>
